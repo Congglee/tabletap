@@ -35,6 +35,8 @@ export const envConfigSchema = z.object({
   DOMAIN: z.string(),
   PROTOCOL: z.string(),
 
+  CLIENT_URL: z.string(),
+
   PRODUCTION: z.enum(['true', 'false']).transform((value) => value === 'true'),
   DOCKER: z.enum(['true', 'false']).transform((value) => value === 'true'),
   PRODUCTION_URL: z.string()
