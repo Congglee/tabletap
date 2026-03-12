@@ -34,21 +34,21 @@ export const requireLoginedHook = async (request: FastifyRequest) => {
 // export const requireOwnerHook = async (request: FastifyRequest) => {
 //   if (request.decodedAccessToken?.role !== Role.Owner) {
 //     appLogger.warn('auth-hook', `Forbidden owner route access on ${request.method} ${request.url}`)
-//     throw new AuthError('You do not have access to this function')
+//     throw new ForbiddenError('You do not have access to this function')
 //   }
 // }
 
 // export const requireEmployeeHook = async (request: FastifyRequest) => {
 //   if (request.decodedAccessToken?.role !== Role.Employee) {
 //     appLogger.warn('auth-hook', `Forbidden employee route access on ${request.method} ${request.url}`)
-//     throw new AuthError('You do not have access to this function')
+//     throw new ForbiddenError('You do not have access to this function')
 //   }
 // }
 
 // export const requireGuestHook = async (request: FastifyRequest) => {
 //   if (request.decodedAccessToken?.role !== Role.Guest) {
 //     appLogger.warn('auth-hook', `Forbidden guest route access on ${request.method} ${request.url}`)
-//     throw new AuthError('You do not have access to this function')
+//     throw new ForbiddenError('You do not have access to this function')
 //   }
 // }
 
@@ -56,7 +56,7 @@ export const requireRoleHook = (role: RoleValue) => {
   return async (request: FastifyRequest) => {
     if (request.decodedAccessToken?.role !== role) {
       appLogger.warn('auth-hook', `Forbidden ${role.toLowerCase()} route access on ${request.method} ${request.url}`)
-      throw new AuthError('You do not have access to this function')
+      throw new ForbiddenError('You do not have access to this function')
     }
   }
 }
