@@ -44,6 +44,9 @@ export const envConfigSchema = z.object({
   GUEST_ACCESS_TOKEN_EXPIRES_IN: z.string(),
   GUEST_REFRESH_TOKEN_EXPIRES_IN: z.string(),
 
+  INITIAL_EMAIL_OWNER: z.string(),
+  INITIAL_PASSWORD_OWNER: z.string(),
+
   CLIENT_URL: z.string(),
 
   PRODUCTION: z.enum(['true', 'false']).transform((value) => value === 'true'),
