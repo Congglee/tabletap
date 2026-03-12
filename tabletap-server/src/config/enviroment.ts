@@ -35,11 +35,22 @@ export const envConfigSchema = z.object({
   DOMAIN: z.string(),
   PROTOCOL: z.string(),
 
+  ACCESS_TOKEN_SECRET: z.string(),
+  ACCESS_TOKEN_EXPIRES_IN: z.string(),
+
+  REFRESH_TOKEN_SECRET: z.string(),
+  REFRESH_TOKEN_EXPIRES_IN: z.string(),
+
+  GUEST_ACCESS_TOKEN_EXPIRES_IN: z.string(),
+  GUEST_REFRESH_TOKEN_EXPIRES_IN: z.string(),
+
   CLIENT_URL: z.string(),
 
   PRODUCTION: z.enum(['true', 'false']).transform((value) => value === 'true'),
   DOCKER: z.enum(['true', 'false']).transform((value) => value === 'true'),
-  PRODUCTION_URL: z.string()
+  PRODUCTION_URL: z.string(),
+
+  PAUSE_SOME_ENDPOINTS: z.enum(['true', 'false']).transform((value) => value === 'true')
 })
 
 const parsedEnv = envConfigSchema.safeParse(process.env)
