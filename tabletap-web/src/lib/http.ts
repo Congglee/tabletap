@@ -34,7 +34,7 @@ export class HttpError extends Error {
   constructor({
     status,
     payload,
-    message = "Lỗi HTTP",
+    message = "HTTP Error",
   }: {
     status: number;
     payload: any;
@@ -57,7 +57,7 @@ export class EntityError extends HttpError {
     status: typeof ENTITY_ERROR_STATUS;
     payload: EntityErrorPayload;
   }) {
-    super({ status, payload, message: "Lỗi thực thể" });
+    super({ status, payload, message: "Entity Error" });
     this.status = status;
     this.payload = payload;
   }
