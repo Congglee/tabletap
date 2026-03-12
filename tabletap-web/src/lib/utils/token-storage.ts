@@ -1,20 +1,20 @@
 const isBrowser = typeof window !== "undefined";
 
-export const getAccessTokenFromLocaleStorage = () => {
+export const getAccessTokenFromLocalStorage = () => {
   return isBrowser ? localStorage.getItem("accessToken") : null;
 };
 
-export const getRefreshTokenFromLocaleStorage = () => {
+export const getRefreshTokenFromLocalStorage = () => {
   return isBrowser ? localStorage.getItem("refreshToken") : null;
 };
 
-export const setAccessTokenToLocaleStorage = (value: string) =>
+export const setAccessTokenToLocalStorage = (value: string) =>
   isBrowser && localStorage.setItem("accessToken", value);
 
-export const setRefreshTokenToLocaleStorage = (value: string) =>
+export const setRefreshTokenToLocalStorage = (value: string) =>
   isBrowser && localStorage.setItem("refreshToken", value);
 
-export const removeTokensFromLocaleStorage = () => {
+export const removeTokensFromLocalStorage = () => {
   isBrowser && localStorage.removeItem("accessToken");
   isBrowser && localStorage.removeItem("refreshToken");
 };
