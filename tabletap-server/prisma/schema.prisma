@@ -9,13 +9,13 @@ datasource db {
 }
 
 model Account {
-  id                     Int              @id @default(autoincrement())
+  id                     String           @id @default(uuid())
   name                   String
   email                  String           @unique
   password               String
   avatar                 String?
   role                   String
-  ownerId                Int?
+  ownerId                String?
   createdAt              DateTime         @default(now())
   updatedAt              DateTime         @updatedAt
   owner                  Account?         @relation("OwnerEmployee", fields: [ownerId], references: [id], onDelete: SetNull, onUpdate: NoAction)
@@ -30,16 +30,20 @@ model Account {
 }
 
 model Dish {
-  id                   Int            @id @default(autoincrement())
-  name                 String
-  price                Int
-  description          String
-  image                String
-  status               String
-  createdAt            DateTime       @default(now())
-  updatedAt            DateTime       @updatedAt
+  id          String   @id @default(uuid())
+  name        String
+  price       Int
+  description String
+  image       String
+  status      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Added for future feature development, expansion, and upgrade scenarios around dish inventory management.
   isOutOfStock         Boolean        @default(false)
+  // Added for future feature development, expansion, and upgrade scenarios around dish inventory state tracking.
   stockUpdatedAt       DateTime?
+  // Added for future feature development, expansion, and upgrade scenarios around preparation time estimation.
   estimatedPrepMinutes Int            @default(0)
   dishSnapshots        DishSnapshot[]
 
@@ -47,13 +51,13 @@ model Dish {
 }
 
 model DishSnapshot {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(uuid())
   name        String
   price       Int
   description String
   image       String
   status      String
-  dishId      Int?
+  dishId      String?
   updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
   dish        Dish?    @relation(fields: [dishId], references: [id], onDelete: SetNull, onUpdate: NoAction)
@@ -63,69 +67,84 @@ model DishSnapshot {
 }
 
 model RestaurantTable {
-  number         Int            @id
-  capacity       Int
-  status         String
-  token          String         @unique
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  isOccupied     Boolean        @default(false)
+  number    Int      @id
+  capacity  Int
+  status    String
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Added for future feature development, expansion, and upgrade scenarios around table occupancy tracking.
+  isOccupied     Boolean   @default(false)
+  // Added for future feature development, expansion, and upgrade scenarios around table occupancy timestamps.
   occupiedAt     DateTime?
+  // Added for future feature development, expansion, and upgrade scenarios around activity monitoring at a table.
   lastActivityAt DateTime?
-  guests         Guest[]
-  orders         Order[]
-  orderBatches   OrderBatch[]
-  tableRequests  TableRequest[]
+
+  guests        Guest[]
+  orders        Order[]
+  orderBatches  OrderBatch[]
+  tableRequests TableRequest[]
 
   @@map("restaurant_tables")
 }
 
 model Guest {
-  id                    Int              @id @default(autoincrement())
+  id                    String    @id @default(uuid())
   name                  String
   tableNumber           Int?
   refreshToken          String?
   refreshTokenExpiresAt DateTime?
-  createdAt             DateTime         @default(now())
-  updatedAt             DateTime         @updatedAt
-  sessionStatus         String           @default("Active")
-  lastActivityAt        DateTime?
-  expiresAt             DateTime?
-  endedAt               DateTime?
-  table                 RestaurantTable? @relation(fields: [tableNumber], references: [number], onDelete: SetNull, onUpdate: NoAction)
-  orders                Order[]
-  socket                Socket?
-  orderBatches          OrderBatch[]
-  tableRequests         TableRequest[]
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Added for future feature development, expansion, and upgrade scenarios around guest session lifecycle management.
+  sessionStatus  String    @default("Active")
+  // Added for future feature development, expansion, and upgrade scenarios around guest activity monitoring.
+  lastActivityAt DateTime?
+  // Added for future feature development, expansion, and upgrade scenarios around guest session expiration handling.
+  expiresAt      DateTime?
+  // Added for future feature development, expansion, and upgrade scenarios around guest session completion tracking.
+  endedAt        DateTime?
+
+  table         RestaurantTable? @relation(fields: [tableNumber], references: [number], onDelete: SetNull, onUpdate: NoAction)
+  orders        Order[]
+  socket        Socket?
+  orderBatches  OrderBatch[]
+  tableRequests TableRequest[]
 
   @@map("guests")
 }
 
 model Order {
-  id               Int              @id @default(autoincrement())
-  guestId          Int?
-  tableNumber      Int?
-  dishSnapshotId   Int              @unique
-  quantity         Int
-  orderHandlerId   Int?
-  status           String
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  orderBatchId     Int?
+  id             String   @id @default(uuid())
+  guestId        String?
+  tableNumber    Int?
+  dishSnapshotId String   @unique
+  quantity       Int
+  orderHandlerId String?
+  status         String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Added for future feature development, expansion, and upgrade scenarios around grouping related orders into batches.
+  orderBatchId     String?
+  // Added for future feature development, expansion, and upgrade scenarios around readiness time estimation.
   estimatedReadyAt DateTime?
-  guest            Guest?           @relation(fields: [guestId], references: [id], onDelete: SetNull, onUpdate: NoAction)
-  table            RestaurantTable? @relation(fields: [tableNumber], references: [number], onDelete: SetNull, onUpdate: NoAction)
-  dishSnapshot     DishSnapshot     @relation(fields: [dishSnapshotId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  orderHandler     Account?         @relation(fields: [orderHandlerId], references: [id], onDelete: SetNull, onUpdate: NoAction)
-  orderBatch       OrderBatch?      @relation(fields: [orderBatchId], references: [id])
-  statusLogs       OrderStatusLog[]
+
+  guest        Guest?           @relation(fields: [guestId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  table        RestaurantTable? @relation(fields: [tableNumber], references: [number], onDelete: SetNull, onUpdate: NoAction)
+  dishSnapshot DishSnapshot     @relation(fields: [dishSnapshotId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  orderHandler Account?         @relation(fields: [orderHandlerId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  orderBatch   OrderBatch?      @relation(fields: [orderBatchId], references: [id])
+  statusLogs   OrderStatusLog[]
 
   @@map("orders")
 }
 
 model RefreshToken {
   token     String   @id
-  accountId Int
+  accountId String
   expiresAt DateTime
   createdAt DateTime @default(now())
   account   Account  @relation(fields: [accountId], references: [id], onDelete: Cascade, onUpdate: NoAction)
@@ -135,23 +154,24 @@ model RefreshToken {
 
 model Socket {
   socketId  String   @id
-  accountId Int?     @unique
-  guestId   Int?     @unique
+  accountId String?  @unique
+  guestId   String?  @unique
   account   Account? @relation(fields: [accountId], references: [id], onDelete: SetNull, onUpdate: NoAction)
   guest     Guest?   @relation(fields: [guestId], references: [id], onDelete: SetNull, onUpdate: NoAction)
 
   @@map("sockets")
 }
 
+// Added for future feature development, expansion, and upgrade scenarios around submitting and managing grouped guest orders.
 model OrderBatch {
-  id               Int             @id @default(autoincrement())
-  guestId          Int
+  id               String          @id @default(uuid())
+  guestId          String
   tableNumber      Int
   code             String          @unique
   status           String          @default("Open")
   submittedAt      DateTime?
   completedAt      DateTime?
-  cloneFromBatchId Int?
+  cloneFromBatchId String?
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
   guest            Guest           @relation(fields: [guestId], references: [id])
@@ -163,12 +183,13 @@ model OrderBatch {
   @@map("order_batches")
 }
 
+// Added for future feature development, expansion, and upgrade scenarios around auditing and tracking order status transitions.
 model OrderStatusLog {
-  id                 Int      @id @default(autoincrement())
-  orderId            Int
+  id                 String   @id @default(uuid())
+  orderId            String
   fromStatus         String?
   toStatus           String
-  changedByAccountId Int?
+  changedByAccountId String?
   note               String?
   createdAt          DateTime @default(now())
   order              Order    @relation(fields: [orderId], references: [id])
@@ -177,14 +198,15 @@ model OrderStatusLog {
   @@map("order_status_logs")
 }
 
+// Added for future feature development, expansion, and upgrade scenarios around table assistance workflows and request handling.
 model TableRequest {
-  id          Int             @id @default(autoincrement())
-  guestId     Int
+  id          String          @id @default(uuid())
+  guestId     String
   tableNumber Int
   type        String          @default("CallStaff")
   status      String          @default("Pending")
   note        String?
-  handlerId   Int?
+  handlerId   String?
   resolvedAt  DateTime?
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt

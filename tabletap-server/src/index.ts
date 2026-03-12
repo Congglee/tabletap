@@ -1,22 +1,71 @@
-import Fastify from 'fastify'
-import { config } from 'dotenv'
+import envConfig, { API_URL } from '@/config/enviroment'
+import buildApp from '@/app'
+import appLogger from '@/config/logger'
 
-config({ path: '.env' })
+const fastify = buildApp()
 
-const fastify = Fastify({ logger: false })
+let isShuttingDown = false
 
-const START_SERVER = async () => {
+const shutdown = async (signal: string, error?: unknown) => {
+  if (isShuttingDown) {
+    return
+  }
+
+  isShuttingDown = true
+
+  if (error) {
+    appLogger.error('server', `Shutdown triggered by ${signal}`, error)
+  } else {
+    appLogger.info('server', `Received ${signal}. Starting graceful shutdown`)
+  }
+
   try {
+    await fastify.close()
+    appLogger.info('server', 'Fastify server closed gracefully')
+  } catch (closeError) {
+    appLogger.error('server', 'Failed to close Fastify cleanly', closeError)
+  }
+
+  process.exit(error ? 1 : 0)
+}
+
+const startServer = async () => {
+  try {
+    await fastify.ready()
+
     await fastify.listen({
-      port: Number(process.env.PORT) || 4000,
-      host: process.env.DOMAIN || 'localhost'
+      port: envConfig.PORT,
+      host: envConfig.DOCKER ? '0.0.0.0' : 'localhost'
     })
 
-    console.log(`Server is running on ${process.env.PROTOCOL}://${process.env.DOMAIN}:${process.env.PORT}`)
+    appLogger.success('server', `Server is running on ${API_URL}`)
   } catch (error) {
-    console.error(error)
+    appLogger.error('server', 'Server bootstrap failed', error)
+
+    try {
+      await fastify.close()
+    } catch (closeError) {
+      appLogger.error('server', 'Failed to close Fastify after bootstrap error', closeError)
+    }
+
     process.exit(1)
   }
 }
 
-START_SERVER()
+process.once('SIGINT', () => {
+  void shutdown('SIGINT')
+})
+
+process.once('SIGTERM', () => {
+  void shutdown('SIGTERM')
+})
+
+process.once('uncaughtException', (error) => {
+  void shutdown('uncaughtException', error)
+})
+
+process.once('unhandledRejection', (reason) => {
+  void shutdown('unhandledRejection', reason)
+})
+
+void startServer()
