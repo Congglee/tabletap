@@ -1,6 +1,7 @@
 import envConfig, { API_URL } from '@/config/enviroment'
 import buildApp from '@/app'
 import appLogger from '@/config/logger'
+import { initOwnerAccount } from '@/controllers/account.controller'
 
 const fastify = buildApp()
 
@@ -32,6 +33,7 @@ const shutdown = async (signal: string, error?: unknown) => {
 const startServer = async () => {
   try {
     await fastify.ready()
+    await initOwnerAccount()
 
     await fastify.listen({
       port: envConfig.PORT,
