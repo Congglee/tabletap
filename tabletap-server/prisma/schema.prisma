@@ -69,7 +69,7 @@ model DishSnapshot {
 model RestaurantTable {
   number    Int      @id
   capacity  Int
-  status    String
+  status    String   @default("Available")
   token     String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -77,9 +77,9 @@ model RestaurantTable {
   // Added for future feature development, expansion, and upgrade scenarios around table occupancy tracking.
   isOccupied     Boolean   @default(false)
   // Added for future feature development, expansion, and upgrade scenarios around table occupancy timestamps.
-  occupiedAt     DateTime?
+  occupiedAt     DateTime? @default(now())
   // Added for future feature development, expansion, and upgrade scenarios around activity monitoring at a table.
-  lastActivityAt DateTime?
+  lastActivityAt DateTime? @default(now())
 
   guests        Guest[]
   orders        Order[]
@@ -101,11 +101,11 @@ model Guest {
   // Added for future feature development, expansion, and upgrade scenarios around guest session lifecycle management.
   sessionStatus  String    @default("Active")
   // Added for future feature development, expansion, and upgrade scenarios around guest activity monitoring.
-  lastActivityAt DateTime?
+  lastActivityAt DateTime? @default(now())
   // Added for future feature development, expansion, and upgrade scenarios around guest session expiration handling.
-  expiresAt      DateTime?
+  expiresAt      DateTime? @default(now())
   // Added for future feature development, expansion, and upgrade scenarios around guest session completion tracking.
-  endedAt        DateTime?
+  endedAt        DateTime? @default(now())
 
   table         RestaurantTable? @relation(fields: [tableNumber], references: [number], onDelete: SetNull, onUpdate: NoAction)
   orders        Order[]
@@ -128,9 +128,9 @@ model Order {
   updatedAt      DateTime @updatedAt
 
   // Added for future feature development, expansion, and upgrade scenarios around grouping related orders into batches.
-  orderBatchId     String?
+  orderBatchId     String?   @default(uuid())
   // Added for future feature development, expansion, and upgrade scenarios around readiness time estimation.
-  estimatedReadyAt DateTime?
+  estimatedReadyAt DateTime? @default(now())
 
   guest        Guest?           @relation(fields: [guestId], references: [id], onDelete: SetNull, onUpdate: NoAction)
   table        RestaurantTable? @relation(fields: [tableNumber], references: [number], onDelete: SetNull, onUpdate: NoAction)
