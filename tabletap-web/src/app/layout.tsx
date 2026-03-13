@@ -1,27 +1,21 @@
-import type { Metadata } from "next";
-import { Inter, Noto_Serif_Georgian, JetBrains_Mono } from "next/font/google";
-import "@/styles/globals.css";
-import QueryProvider from "@/providers/query-provider";
+import { Toaster } from "@/components/ui/sonner";
 import AppProvider from "@/providers/app-provider";
+import QueryProvider from "@/providers/query-provider";
+import ThemeProvider from "@/providers/theme-provider";
+import "@/styles/globals.css";
+import type { Metadata } from "next";
+import { Rubik } from "next/font/google";
+import NextTopLoader from "nextjs-toploader";
 
-const fontSans = Inter({
+const rubik = Rubik({
   subsets: ["latin"],
-  variable: "--font-sans",
-});
-
-const fontSerif = Noto_Serif_Georgian({
-  subsets: ["latin"],
-  variable: "--font-serif",
-});
-
-const fontMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-rubik",
 });
 
 export const metadata: Metadata = {
   title: "TableTap",
-  description: "TableTap is a platform for managing your restaurant",
+  description: "TableTap is a platform for managing your small restaurant",
 };
 
 export default function RootLayout({
@@ -31,11 +25,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${fontSans.variable} ${fontSerif.variable} ${fontMono.variable} antialiased`}
-      >
+      <body className={`${rubik.variable} ${rubik.className} antialiased`}>
+        <NextTopLoader
+          color="hsl(var(--muted-foreground))"
+          showSpinner={false}
+        />
         <QueryProvider>
-          <AppProvider>{children}</AppProvider>
+          <AppProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              <Toaster richColors />
+            </ThemeProvider>
+          </AppProvider>
         </QueryProvider>
       </body>
     </html>
