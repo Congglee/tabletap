@@ -1,5 +1,6 @@
 import SheetMenu from "@/app/manage/_components/sheet-menu";
 import ModeToggle from "@/components/mode-toggle";
+import Notifications from "@/components/notifications";
 import UserNav from "@/components/user-nav";
 
 export default function ManageNav() {
@@ -9,7 +10,8 @@ export default function ManageNav() {
         <div className="flex items-center space-x-4 md:space-x-0">
           <SheetMenu />
         </div>
-        <div className="flex flex-1 items-center space-x-4 justify-end">
+        <div className="flex flex-1 items-center space-x-3 justify-end">
+          <Notifications />
           <ModeToggle />
           <UserNav />
         </div>

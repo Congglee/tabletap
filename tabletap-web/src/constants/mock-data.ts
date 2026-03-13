@@ -52,3 +52,55 @@ export const mockDishRanking = [
     description: "Cá mú đỏ hấp xì dầu",
   },
 ];
+
+export interface MockNotification {
+  id: string;
+  title: string;
+  message: string;
+  timestamp: string;
+  read: boolean;
+  type: "order" | "reservation" | "system";
+}
+
+export const mockNotifications: MockNotification[] = [
+  {
+    id: "notif-1",
+    title: "Đơn hàng mới",
+    message: "Bàn 12 vừa đặt thêm 2 món Cua Hoàng Đế",
+    timestamp: "2 phút trước",
+    read: false,
+    type: "order",
+  },
+  {
+    id: "notif-2",
+    title: "Đặt bàn mới",
+    message: "Khách Nguyễn Văn Hùng đặt bàn 4 người lúc 19:00 ngày mai",
+    timestamp: "15 phút trước",
+    read: false,
+    type: "reservation",
+  },
+  {
+    id: "notif-3",
+    title: "Đơn đã thanh toán",
+    message: "Bàn 8 đã thanh toán 2.450.000đ",
+    timestamp: "1 giờ trước",
+    read: true,
+    type: "order",
+  },
+  {
+    id: "notif-4",
+    title: "Cập nhật hệ thống",
+    message: "Phiên bản 1.2.0 đã sẵn sàng với cải tiến báo cáo doanh thu",
+    timestamp: "3 giờ trước",
+    read: true,
+    type: "system",
+  },
+  {
+    id: "notif-5",
+    title: "Hủy đặt bàn",
+    message: "Đặt bàn bàn 6 lúc 18:30 đã được hủy bởi khách",
+    timestamp: "5 giờ trước",
+    read: true,
+    type: "reservation",
+  },
+];

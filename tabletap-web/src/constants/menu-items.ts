@@ -64,21 +64,6 @@ export const menuItems: MenuGroup[] = [
         icon: Square,
         submenus: [],
       },
-      // {
-      //   href: "/manage/dining-sessions",
-      //   label: "Dining sessions",
-      //   icon: Clock,
-      //   submenus: [
-      //     {
-      //       href: "/manage/dining-sessions",
-      //       label: "All dining sessions",
-      //     },
-      //     {
-      //       href: "/manage/dining-sessions/open",
-      //       label: "Open dining sessions",
-      //     },
-      //   ],
-      // },
     ],
   },
   {
