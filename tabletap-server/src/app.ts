@@ -9,6 +9,8 @@ import fastifyCookie from '@fastify/cookie'
 
 // Config imports
 import { corsOptions } from '@/config/cors'
+import autoRemoveRefreshTokenJob from '@/jobs/auth.job'
+import appLogger from '@/config/logger'
 
 // Frameworks/Libraries imports
 import Fastify from 'fastify'
@@ -16,8 +18,7 @@ import Fastify from 'fastify'
 // Routes imports
 import healthRoutes from '@/routes/health.route'
 import authRoutes from '@/routes/auth.route'
-import appLogger from '@/config/logger'
-import autoRemoveRefreshTokenJob from '@/jobs/auth.job'
+import tablesRoutes from '@/routes/table.route'
 
 const buildApp = () => {
   const fastify = Fastify({ logger: false })
@@ -39,6 +40,9 @@ const buildApp = () => {
 
   fastify.register(authRoutes, {
     prefix: '/auth'
+  })
+  fastify.register(tablesRoutes, {
+    prefix: '/tables'
   })
   fastify.register(healthRoutes, {
     prefix: '/health'

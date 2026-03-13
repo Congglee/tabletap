@@ -12,3 +12,11 @@ export const Role = {
 } as const
 
 export const RoleValues = [Role.Owner, Role.Employee, Role.Guest] as const
+
+export const TableStatus = {
+  Available: 'Available',
+  Hidden: 'Hidden',
+  Reserved: 'Reserved'
+} as const
+
+export const TableStatusValues = [TableStatus.Available, TableStatus.Hidden, TableStatus.Reserved] as const
