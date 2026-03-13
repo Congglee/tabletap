@@ -1,28 +1,96 @@
 "use client";
 
-import { useEffect } from "react";
+import { type RoleType } from "@/types/jwt.type";
+import {
+  getAccessTokenFromLocalStorage,
+  removeTokensFromLocalStorage,
+} from "@/lib/utils/token-storage";
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
+import { useEffect, useRef } from "react";
+import { decodeToken } from "@/lib/jwt-decode";
+import TokenRefreshManager from "@/components/token-refresh-manager";
 
 type AppStoreType = {
-  count: number;
-  increment: () => void;
+  isAuth: boolean;
+  role: RoleType | undefined;
+  setRole: (role?: RoleType | undefined) => void;
+  hydrated: boolean;
+  setHydrated: (hydrated: boolean) => void;
+  sidebarOpen: boolean;
+  setSidebarOpen: (open: boolean) => void;
+  toggleSidebar: () => void;
 };
 
-export const useAppStore = create<AppStoreType>((set) => ({
-  count: 0,
-  increment: () => set((state) => ({ count: state.count + 1 })),
-}));
+export const useAppStore = create<AppStoreType>()(
+  persist(
+    (set) => ({
+      isAuth: false,
+      role: undefined as RoleType | undefined,
+      setRole: (role?: RoleType | undefined) => {
+        set({ role, isAuth: Boolean(role) });
+
+        if (!role) {
+          removeTokensFromLocalStorage();
+        }
+      },
+      hydrated: false,
+      setHydrated: (hydrated) => set({ hydrated }),
+      sidebarOpen: true,
+      setSidebarOpen: (open) => set({ sidebarOpen: open }),
+      toggleSidebar: () =>
+        set((state) => ({
+          sidebarOpen: !state.sidebarOpen,
+        })),
+    }),
+    {
+      name: "sidebar",
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({ sidebarOpen: state.sidebarOpen }),
+      onRehydrateStorage: () => (state) => {
+        state?.setHydrated(true);
+      },
+    }
+  )
+);
 
 export default function AppProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { increment } = useAppStore();
+  const hydrated = useAppStore((state) => state.hydrated);
+  const setRole = useAppStore((state) => state.setRole);
+  // Initialize socket instance
+
+  const count = useRef(0);
 
   useEffect(() => {
-    increment();
-  }, []);
+    if (count.current === 0) {
+      const accessToken = getAccessTokenFromLocalStorage();
 
-  return <>{children}</>;
+      if (accessToken) {
+        const role = decodeToken(accessToken).role;
+
+        setRole(role);
+        // Set socket instance
+      }
+
+      count.current++;
+    }
+  }, [
+    setRole,
+    // set socket dependency
+  ]);
+
+  if (!hydrated) {
+    return null;
+  }
+
+  return (
+    <>
+      {children}
+      <TokenRefreshManager />
+    </>
+  );
 }

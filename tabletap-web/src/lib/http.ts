@@ -1,9 +1,9 @@
 import envConfig from "@/config/enviroment";
 import {
-  getAccessTokenFromLocaleStorage,
-  removeTokensFromLocaleStorage,
-  setAccessTokenToLocaleStorage,
-  setRefreshTokenToLocaleStorage,
+  getAccessTokenFromLocalStorage,
+  removeTokensFromLocalStorage,
+  setAccessTokenToLocalStorage,
+  setRefreshTokenToLocalStorage,
 } from "@/lib/utils/token-storage";
 import { normalizePath } from "@/lib/utils/path";
 import { LoginResType } from "@/schemas/auth.schema";
@@ -101,7 +101,7 @@ const request = async <Response>(
     body instanceof FormData ? {} : { "Content-Type": "application/json" };
 
   if (isClient) {
-    const accessToken = getAccessTokenFromLocaleStorage();
+    const accessToken = getAccessTokenFromLocalStorage();
     if (accessToken) {
       baseHeaders.Authorization = `Bearer ${accessToken}`;
     }
@@ -122,6 +122,7 @@ const request = async <Response>(
     body,
     method,
   });
+
   const payload: Response = await res.json();
   const data = { status: res.status, payload };
 
@@ -158,7 +159,7 @@ const request = async <Response>(
             // clientSessionToken.value = "";
 
             // Even if logout fails, clear local tokens, reset the shared request, and send the user to login.
-            removeTokensFromLocaleStorage();
+            removeTokensFromLocalStorage();
             clientLogoutRequest = null;
 
             // Redirecting to login can cause loops if that page immediately makes protected API calls.
@@ -193,21 +194,21 @@ const request = async <Response>(
       // Persist tokens after a successful client-side login request.
       const { accessToken, refreshToken } = (payload as LoginResType).data;
 
-      setAccessTokenToLocaleStorage(accessToken);
-      setRefreshTokenToLocaleStorage(refreshToken);
+      setAccessTokenToLocalStorage(accessToken);
+      setRefreshTokenToLocalStorage(refreshToken);
     } else if ("api/auth/session" === normalizeUrl) {
       const { accessToken, refreshToken } = payload as {
         accessToken: string;
         refreshToken: string;
       };
 
-      setAccessTokenToLocaleStorage(accessToken);
-      setRefreshTokenToLocaleStorage(refreshToken);
+      setAccessTokenToLocalStorage(accessToken);
+      setRefreshTokenToLocalStorage(refreshToken);
     } else if (
       ["api/auth/logout", "api/guest/auth/logout"].includes(normalizeUrl)
     ) {
       // Clear stored tokens after a successful client-side logout request.
-      removeTokensFromLocaleStorage();
+      removeTokensFromLocalStorage();
     }
   }
   return data;
