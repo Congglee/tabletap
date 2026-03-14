@@ -25,6 +25,8 @@ const tableApiRequest = {
 
   updateTable: (id: number, body: UpdateTableBodyType) =>
     http.put<TableResType>(`tables/${id}`, body),
+
+  deleteTable: (id: number) => http.delete<TableResType>(`tables/${id}`),
 };
 
 export default tableApiRequest;

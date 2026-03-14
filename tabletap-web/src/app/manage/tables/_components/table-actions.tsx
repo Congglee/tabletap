@@ -8,6 +8,8 @@ import {
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEditTableStore } from "@/store/tables/use-edit-table";
+import { useDeleteTableMutation } from "@/queries/use-table";
+import { toast } from "sonner";
 
 interface TableActionsProps {
   tableNumber: number;
@@ -21,17 +23,19 @@ export default function TableActions({ tableNumber }: TableActionsProps) {
 
   const { setTableNumber, setEditTableSheetOpen } = useEditTableStore();
 
+  const { mutateAsync } = useDeleteTableMutation();
+
   const handleEditTableSheetOpen = () => {
     setTableNumber(tableNumber);
     setEditTableSheetOpen(true);
   };
 
-  const handleDelete = async () => {
+  const handleDeleteTable = async () => {
     const ok = await confirm();
 
     if (ok) {
-      // Delete table
-      console.log("Delete table with number:", tableNumber);
+      const result = await mutateAsync(tableNumber);
+      toast.success(result.payload.message);
     }
   };
 
@@ -53,7 +57,7 @@ export default function TableActions({ tableNumber }: TableActionsProps) {
             Edit Table
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={handleDelete}
+            onClick={handleDeleteTable}
             className="cursor-pointer font-medium p-[10px] text-destructive focus:text-destructive/80"
           >
             <Trash className="size-4 mr-2 stroke-2" />

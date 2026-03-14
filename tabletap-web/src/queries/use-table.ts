@@ -52,3 +52,16 @@ export const useUpdateTableMutation = () => {
     },
   });
 };
+
+export const useDeleteTableMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: tableApiRequest.deleteTable,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["tables"],
+      });
+    },
+  });
+};
