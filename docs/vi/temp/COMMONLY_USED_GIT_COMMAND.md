@@ -1,7 +1,7 @@
 # Câu lệnh git thường dùng
 
 ```bash
-git checkout dev && git pull orgin dev
+git checkout dev && git pull origin dev
 ```
 
 ```bash
