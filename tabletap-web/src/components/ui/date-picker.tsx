@@ -541,8 +541,8 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
           </PopoverTrigger>
           {isPopoverOpen && (
             <PopoverContent
-              className="w-auto"
-              align="center"
+              className="w-[--radix-popover-trigger-width] lg:w-full"
+              align="start"
               avoidCollisions={false}
               onInteractOutside={handleClose}
               onEscapeKeyDown={handleClose}
@@ -553,7 +553,7 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
             >
               <div className="flex">
                 {numberOfMonths === 2 && (
-                  <div className="hidden md:flex flex-col gap-1 pr-4 text-left border-r border-foreground/10">
+                  <div className="flex flex-col gap-1 pr-4 text-left border-r border-foreground/10">
                     {dateRanges.map(({ label, start, end }) => (
                       <Button
                         key={label}
@@ -589,7 +589,7 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
                           monthFrom ? months[monthFrom.getMonth()] : undefined
                         }
                       >
-                        <SelectTrigger className="hidden sm:flex w-[122px] focus:ring-0 focus:ring-offset-0 font-medium hover:bg-accent hover:text-accent-foreground">
+                        <SelectTrigger className="flex w-[122px] focus:ring-0 focus:ring-offset-0 font-medium hover:bg-accent hover:text-accent-foreground">
                           <SelectValue placeholder="Month" />
                         </SelectTrigger>
                         <SelectContent>
@@ -607,7 +607,7 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
                         }}
                         value={yearFrom ? yearFrom.toString() : undefined}
                       >
-                        <SelectTrigger className="hidden sm:flex w-[122px] focus:ring-0 focus:ring-offset-0 font-medium hover:bg-accent hover:text-accent-foreground">
+                        <SelectTrigger className="flex w-[122px] focus:ring-0 focus:ring-offset-0 font-medium hover:bg-accent hover:text-accent-foreground">
                           <SelectValue placeholder="Year" />
                         </SelectTrigger>
                         <SelectContent>
@@ -630,7 +630,7 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
                             monthTo ? months[monthTo.getMonth()] : undefined
                           }
                         >
-                          <SelectTrigger className="hidden sm:flex w-[122px] focus:ring-0 focus:ring-offset-0 font-medium hover:bg-accent hover:text-accent-foreground">
+                          <SelectTrigger className="flex w-[122px] focus:ring-0 focus:ring-offset-0 font-medium hover:bg-accent hover:text-accent-foreground">
                             <SelectValue placeholder="Month" />
                           </SelectTrigger>
                           <SelectContent>
@@ -648,7 +648,7 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
                           }}
                           value={yearTo ? yearTo.toString() : undefined}
                         >
-                          <SelectTrigger className="hidden sm:flex w-[122px] focus:ring-0 focus:ring-offset-0 font-medium hover:bg-accent hover:text-accent-foreground">
+                          <SelectTrigger className="flex w-[122px] focus:ring-0 focus:ring-offset-0 font-medium hover:bg-accent hover:text-accent-foreground">
                             <SelectValue placeholder="Year" />
                           </SelectTrigger>
                           <SelectContent>
