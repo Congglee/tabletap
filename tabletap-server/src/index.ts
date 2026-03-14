@@ -1,4 +1,4 @@
-import envConfig, { API_URL } from '@/config/enviroment'
+import envConfig, { API_URL } from '@/config/environment'
 import buildApp from '@/app'
 import appLogger from '@/config/logger'
 import { initOwnerAccount } from '@/controllers/account.controller'

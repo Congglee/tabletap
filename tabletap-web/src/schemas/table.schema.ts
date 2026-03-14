@@ -1,5 +1,5 @@
 import { TableStatusValues } from "@/constants/type";
-import z from "zod";
+import { z } from "zod";
 
 export const TableStatus = z.enum(TableStatusValues);
 

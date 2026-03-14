@@ -1,11 +1,15 @@
 import { DishStatusValues } from '@/constants/type'
-import z from 'zod'
+import { z } from 'zod'
+
+export const DishStatus = z.enum(DishStatusValues)
+
+export type DishStatusType = z.TypeOf<typeof DishStatus>
 
 export const CreateDishBody = z.object({
-  name: z.string().min(1).max(256),
-  price: z.coerce.number().positive(),
-  description: z.string().max(10000),
-  image: z.string().url(),
+  name: z.string().trim().min(1, 'Dish name is required').max(256),
+  price: z.coerce.number().positive({ message: 'Price must be greater than 0' }),
+  description: z.string().trim().min(1, 'Description is required').max(10000),
+  image: z.string().trim().min(1, 'Image is required').url({ message: 'Image must be a valid URL' }),
   status: z.enum(DishStatusValues).optional()
 })
 
@@ -51,7 +55,7 @@ export type DishListResType = z.TypeOf<typeof DishListRes>
 
 export const UpdateDishBody = CreateDishBody
 
-export type UpdateDishBodyType = CreateDishBodyType
+export type UpdateDishBodyType = z.TypeOf<typeof UpdateDishBody>
 
 export const DishParams = z.object({
   id: z.string()

@@ -87,22 +87,22 @@ export default function EditTable() {
 
   useEffect(() => {
     form.reset({
-      capacity: table?.capacity ?? 2,
-      status: table?.status ?? TableStatus.Hidden,
-      changeToken: form.getValues("changeToken"),
+      capacity: 2,
+      status: TableStatus.Hidden,
+      changeToken: false,
     });
   }, [form, tableNumber]);
 
   useEffect(() => {
-    if (data) {
-      const { capacity, status } = data.payload.data;
+    if (table) {
+      const { capacity, status } = table;
       form.reset({
         capacity,
         status,
         changeToken: form.getValues("changeToken"),
       });
     }
-  }, [data, form]);
+  }, [table, form]);
 
   const onSubmit = form.handleSubmit(
     async (values) => {
@@ -137,13 +137,7 @@ export default function EditTable() {
         }
       }}
     >
-      <SheetContent
-        className="space-y-4 w-full sm:max-w-lg overflow-y-auto scroll"
-        onCloseAutoFocus={() => {
-          form.reset();
-          handleResetEditTableForm();
-        }}
-      >
+      <SheetContent className="space-y-4 w-full sm:max-w-lg overflow-y-auto scroll">
         <SheetHeader>
           <SheetTitle>Edit Table</SheetTitle>
           <SheetDescription>Edit the table details.</SheetDescription>

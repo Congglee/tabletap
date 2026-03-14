@@ -30,7 +30,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-export default function NewTableSheet() {
+export default function NewTable() {
   const { newTableSheetOpen, setNewTableSheetOpen } = useNewTableStore();
 
   const form = useForm<CreateTableBodyType>({
@@ -80,10 +80,7 @@ export default function NewTableSheet() {
       open={newTableSheetOpen}
       onOpenChange={handleNewTableSheetOpenChange}
     >
-      <SheetContent
-        className="space-y-4 w-full sm:max-w-lg overflow-y-auto scroll"
-        onCloseAutoFocus={handleResetAddTableForm}
-      >
+      <SheetContent className="space-y-4 w-full sm:max-w-lg overflow-y-auto scroll">
         <SheetHeader>
           <SheetTitle>New Table</SheetTitle>
           <SheetDescription>

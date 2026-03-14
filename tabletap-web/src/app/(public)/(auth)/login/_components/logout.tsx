@@ -88,7 +88,7 @@ function SignOut() {
 
 const Logout = memo(function LogoutInner() {
   return (
-    <Suspense fallback={<Loader message="Signing out..." />}>
+    <Suspense>
       <SignOut />
     </Suspense>
   );

@@ -5,6 +5,7 @@ import { refreshTokensIfNeeded } from "@/lib/utils/auth-client";
 import { getRefreshTokenFromLocalStorage } from "@/lib/utils/token-storage";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import Loader from "@/components/loader";
 
 export default function RefreshTokenHandler() {
   const router = useRouter();
@@ -34,5 +35,5 @@ export default function RefreshTokenHandler() {
     }
   }, [router, refreshTokenFromUrl, redirectPathname]);
 
-  return <div>Refresh token ...</div>;
+  return <Loader fullPage message="Restoring session..." />;
 }

@@ -13,6 +13,10 @@ npm run db:deploy:staging
 npm run db:deploy:prod
 ```
 
+```bash
+NODE_ENV=development npx tsx src/scripts/seed-dishes.ts
+```
+
 Lưu ý nhỏ:
 
 - `db:migrate:dev` phù hợp cho local/dev branch.
