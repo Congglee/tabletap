@@ -1,4 +1,4 @@
-import envConfig from "@/config/enviroment";
+import envConfig from "@/config/environment";
 import {
   getAccessTokenFromLocalStorage,
   removeTokensFromLocalStorage,

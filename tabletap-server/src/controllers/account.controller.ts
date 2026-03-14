@@ -1,4 +1,4 @@
-import envConfig from '@/config/enviroment'
+import envConfig from '@/config/environment'
 import appLogger from '@/config/logger'
 import { Role } from '@/constants/type'
 import prisma from '@/database'

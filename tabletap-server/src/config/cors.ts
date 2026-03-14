@@ -1,4 +1,4 @@
-import envConfig, { API_URL } from '@/config/enviroment'
+import envConfig, { API_URL } from '@/config/environment'
 import appLogger from '@/config/logger'
 import HTTP_STATUS from '@/constants/http-status'
 import { FastifyCorsOptions } from '@fastify/cors'

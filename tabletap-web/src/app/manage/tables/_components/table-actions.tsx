@@ -18,7 +18,8 @@ interface TableActionsProps {
 export default function TableActions({ tableNumber }: TableActionsProps) {
   const [ConfirmDialog, confirm] = useConfirm(
     "Are you sure you want to delete this table?",
-    "You are about to delete this table."
+    "You are about to delete this table.",
+    "destructive"
   );
 
   const { setTableNumber, setEditTableSheetOpen } = useEditTableStore();

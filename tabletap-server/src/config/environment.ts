@@ -44,6 +44,8 @@ export const envConfigSchema = z.object({
   GUEST_ACCESS_TOKEN_EXPIRES_IN: z.string(),
   GUEST_REFRESH_TOKEN_EXPIRES_IN: z.string(),
 
+  UPLOAD_FOLDER: z.string(),
+
   INITIAL_EMAIL_OWNER: z.string(),
   INITIAL_PASSWORD_OWNER: z.string(),
 

@@ -14,17 +14,25 @@ import appLogger from '@/config/logger'
 
 // Frameworks/Libraries imports
 import Fastify from 'fastify'
+import path from 'path'
 
 // Routes imports
 import healthRoutes from '@/routes/health.route'
 import authRoutes from '@/routes/auth.route'
 import tablesRoutes from '@/routes/table.route'
 import dishRoutes from '@/routes/dish.route'
+import mediaRoutes from '@/routes/media.route'
+import { createFolder } from '@/utils/commons'
+import envConfig from '@/config/environment'
+import staticRoutes from '@/routes/static.route'
 
 const buildApp = () => {
   const fastify = Fastify({ logger: false })
 
   appLogger.info('server', 'Starting backend bootstrap')
+
+  createFolder(path.resolve(envConfig.UPLOAD_FOLDER))
+  appLogger.debug('server', `Upload folder ready: ${envConfig.UPLOAD_FOLDER}`)
 
   autoRemoveRefreshTokenJob()
   appLogger.info('server', 'Refresh token cleanup job started')
@@ -47,6 +55,12 @@ const buildApp = () => {
   })
   fastify.register(dishRoutes, {
     prefix: '/dishes'
+  })
+  fastify.register(mediaRoutes, {
+    prefix: '/media'
+  })
+  fastify.register(staticRoutes, {
+    prefix: '/static'
   })
   fastify.register(healthRoutes, {
     prefix: '/health'
