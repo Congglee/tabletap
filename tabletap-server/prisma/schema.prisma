@@ -35,14 +35,14 @@ model Dish {
   price       Int
   description String
   image       String
-  status      String
+  status      String   @default("Active")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   // Added for future feature development, expansion, and upgrade scenarios around dish inventory management.
   isOutOfStock         Boolean        @default(false)
   // Added for future feature development, expansion, and upgrade scenarios around dish inventory state tracking.
-  stockUpdatedAt       DateTime?
+  stockUpdatedAt       DateTime?      @default(now())
   // Added for future feature development, expansion, and upgrade scenarios around preparation time estimation.
   estimatedPrepMinutes Int            @default(0)
   dishSnapshots        DishSnapshot[]
@@ -56,7 +56,7 @@ model DishSnapshot {
   price       Int
   description String
   image       String
-  status      String
+  status      String   @default("Active")
   dishId      String?
   updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())

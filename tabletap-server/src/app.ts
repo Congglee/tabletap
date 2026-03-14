@@ -19,6 +19,7 @@ import Fastify from 'fastify'
 import healthRoutes from '@/routes/health.route'
 import authRoutes from '@/routes/auth.route'
 import tablesRoutes from '@/routes/table.route'
+import dishRoutes from '@/routes/dish.route'
 
 const buildApp = () => {
   const fastify = Fastify({ logger: false })
@@ -43,6 +44,9 @@ const buildApp = () => {
   })
   fastify.register(tablesRoutes, {
     prefix: '/tables'
+  })
+  fastify.register(dishRoutes, {
+    prefix: '/dishes'
   })
   fastify.register(healthRoutes, {
     prefix: '/health'
